@@ -1,0 +1,24 @@
+{
+	"folders": [{
+		"path": "."
+	}],
+	"settings": {
+		"files.exclude": {
+			"**/.git": true,
+			"**/.svn": true,
+			"**/.hg": true,
+			"**/CVS": true,
+			"**/.DS_Store": true,
+			"back": true,
+			".metadata": true,
+			".project": true
+		},
+		"editor.formatOnSave": true
+	},
+	"extensions": {
+		"recommendations": [
+			"octref.vetur",
+			"esbenp.prettier-vscode"
+		]
+	}
+}
