@@ -13,12 +13,14 @@
 			".metadata": true,
 			".project": true
 		},
-		"editor.formatOnSave": true
+		"editor.formatOnSave": true,
+		"terminal.integrated.cwd": "front"
 	},
 	"extensions": {
 		"recommendations": [
 			"octref.vetur",
-			"esbenp.prettier-vscode"
+			"esbenp.prettier-vscode",
+			"VisualStudioExptTeam.vscodeintellicode"
 		]
 	}
 }
