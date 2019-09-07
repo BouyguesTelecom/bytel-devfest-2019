@@ -20,9 +20,6 @@ export default {
   name: "App",
   components: {
     Accueil
-  },
-  data: () => ({
-    //
-  })
+  }
 };
 </script>
