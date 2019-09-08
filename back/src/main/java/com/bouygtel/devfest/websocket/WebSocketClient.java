@@ -1,6 +1,7 @@
 package com.bouygtel.devfest.websocket;
 
-import java.util.concurrent.atomic.AtomicInteger;
+import java.io.IOException;
+import java.io.UncheckedIOException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,6 +11,9 @@ import org.springframework.web.socket.WebSocketHandler;
 import org.springframework.web.socket.WebSocketMessage;
 import org.springframework.web.socket.WebSocketSession;
 
+import com.bouygtel.devfest.ressources.Action;
+import com.bouygtel.devfest.ressources.Message;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
@@ -17,26 +21,43 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  */
 public class WebSocketClient implements WebSocketHandler {
 	private static final Logger LOG = LoggerFactory.getLogger(WebSocketClient.class);
+	private static final ObjectMapper MAPPER = new ObjectMapper();
 
-	private static AtomicInteger compteur = new AtomicInteger(0);
+	private static WebSocketSession webSocketSession = null;
+	private MessageHandler messageHandler;
+
+	public WebSocketClient(MessageHandler messageHandler) {
+		this.messageHandler = messageHandler;
+	}
+
+	public void sendMessage(Message message) {
+		if (webSocketSession != null) {
+			try {
+				webSocketSession.sendMessage(new TextMessage(MAPPER.writeValueAsBytes(message)));
+			} catch (JsonProcessingException e) {
+				throw new RuntimeException(e);
+			} catch (IOException e) {
+				throw new UncheckedIOException(e);
+			}
+		}
+	}
+
+	public void sendMessage(Action action, Object value) {
+		sendMessage(new Message(action, value));
+	}
 
 	@Override
 	public void afterConnectionEstablished(WebSocketSession session) throws Exception {
 		LOG.info("Reception d'une connexion !");
+		webSocketSession = session;
+
 	}
 
 	@Override
-	public void handleMessage(WebSocketSession session, WebSocketMessage<?> message) throws Exception {
-		LOG.info("Reception du message: {}", message.getPayload());
-		ObjectMapper mapper = new ObjectMapper();
-		Message m = mapper.readValue((String) message.getPayload(), Message.class);
-		if (m.getAction().equals("resetCounter")) {
-			compteur.set(0);
-		} else {
-			compteur.incrementAndGet();
-		}
-		LOG.debug("Envoi du compteur: {}", compteur);
-		session.sendMessage(new TextMessage("{\"action\": \"setCounter\",\"value\": " + compteur + "}"));
+	public void handleMessage(WebSocketSession session, WebSocketMessage<?> messageIn) throws Exception {
+		LOG.info("Reception du message: {}", messageIn.getPayload());
+		Message message = MAPPER.readValue((String) messageIn.getPayload(), Message.class);
+		messageHandler.handleMessage(message);
 	}
 
 	@Override

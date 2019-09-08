@@ -15,11 +15,16 @@ export default {
     counter: state => state.game.counter,
     isConnected: state => state.websocket.isConnected
   }),
+  watch: {
+    isConnected: function(value) {
+      if (value) this.getCounter();
+    }
+  },
   methods: {
-    ...mapActions(["resetCounter"]),
+    ...mapActions(["resetCounter", "getCounter"]),
     sendMessage() {
       console.log("ici");
-      this.$store.dispatch("sendMessage", { action: "increment" });
+      this.$store.dispatch("sendMessage", { action: "SET_COUNTER" });
     }
   }
 };
