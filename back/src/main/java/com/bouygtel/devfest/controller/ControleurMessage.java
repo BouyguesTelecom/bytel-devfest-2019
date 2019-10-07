@@ -26,7 +26,7 @@ public class ControleurMessage {
 
 	public void nouveauMessage(long timestampMessage) {
 		LOG.info("Nouveau message à traiter, reçu à {}", timestampMessage);
-		ressources.incrementCounter();
+		ressources.ajouterFrappe();
 	}
 
 }

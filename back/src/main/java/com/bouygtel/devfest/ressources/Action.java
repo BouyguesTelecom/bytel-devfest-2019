@@ -1,7 +1,7 @@
 package com.bouygtel.devfest.ressources;
 
 public enum Action {
-	SET_COUNTER, //
-	GET_COUNTER, //
+	SET_SPEED, //
+	GET_SPEED, //
 	RESET_COUNTER;
 }

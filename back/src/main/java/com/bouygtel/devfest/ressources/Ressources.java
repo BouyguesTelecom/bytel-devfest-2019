@@ -1,6 +1,10 @@
 package com.bouygtel.devfest.ressources;
 
-import java.util.concurrent.atomic.AtomicInteger;
+import java.time.Instant;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,7 +21,8 @@ public class Ressources {
 
 	private static final Logger LOG = LoggerFactory.getLogger(Ressources.class);
 
-	private static final AtomicInteger counter = new AtomicInteger(0);
+	private static List<Instant> frappes = new ArrayList<>();
+	private static Long maxSpeed = 0L;
 
 	private WebSocketClient webSocketClient;
 
@@ -27,26 +32,27 @@ public class Ressources {
 
 	@ActionExecuter(action = "RESET_COUNTER")
 	public void resetCounter() {
-		setCounter(0);
+		frappes = Collections.emptyList();
 	}
 
-	@ActionExecuter(action = "GET_COUNTER")
+	@ActionExecuter(action = "GET_SPEED")
 	public void getCounter() {
-		sendCounter();
+		sendSpeed();
 	}
 
-	public void setCounter(int value) {
-		counter.set(value);
-		sendCounter();
+	public void ajouterFrappe() {
+		frappes.add(Instant.now());
+		sendSpeed();
 	}
 
-	public void incrementCounter() {
-		counter.incrementAndGet();
-		sendCounter();
-	}
-
-	private void sendCounter() {
-		webSocketClient.sendMessage(Action.SET_COUNTER, counter);
+	public void sendSpeed() {
+		Long speed = frappes.stream()//
+				.filter(instant -> Instant.now().minusSeconds(1).isBefore(instant))//
+				.collect(Collectors.counting());
+		if (speed > maxSpeed)
+			maxSpeed = speed;
+		LOG.info("speed : {}", speed);
+		webSocketClient.sendMessage(Action.SET_SPEED, speed);
 	}
 
 }

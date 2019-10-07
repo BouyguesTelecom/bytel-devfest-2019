@@ -1,10 +1,12 @@
 export default {
   state: {
-    counter: 0
+    speed: 0,
+    maxSpeed: 0
   },
   mutations: {
-    setCounter(state, value) {
-      state.counter = value;
+    setSpeed(state, value) {
+      state.speed = value;
+      if (value > state.maxSpeed) state.maxSpeed = value;
     }
   },
   actions: {}
