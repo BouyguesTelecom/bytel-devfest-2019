@@ -3,8 +3,8 @@
     <div class="volume-control">
       <div class="graduation graduation-verticale">
         <div class="degrade">
-          <div class="background" :style="percentageToHeight(percent)"></div>
-          <div class="currentBest" :style="percentageToHeight(currentBest.value)"></div>
+          <div class="background" :style="speedToHeight(speed)"></div>
+          <div class="currentBest" :style="speedToHeight(currentBest.value)"></div>
           <div class="separateur"></div>
         </div>
       </div>
@@ -27,39 +27,35 @@ export default {
   data: () => ({
     currentBest: {
       moment: moment(),
-      value: 1
+      value: 0
     }
   }),
   computed: {
-    percent: function() {
-      if (this.maxSpeed === 0) {
-        return 1;
-      }
-      return (this.maxSpeed - this.speed) / this.maxSpeed;
-    },
     halfMaxSpeed: function() {
       return Math.round(this.maxSpeed / 2);
     }
   },
   watch: {
-    percent: function(percent) {
-      if (percent < this.currentBest.value) {
-        this.currentBest = {
-          moment: moment(),
-          value: percent
-        };
-      }
-      if (this.currentBest.moment.isBefore(moment().subtract(1, "seconds"))) {
-        this.currentBest = {
-          moment: moment(),
-          value: percent
-        };
+    speed: function(speed) {
+      if (
+        speed > this.currentBest.value ||
+        this.currentBest.moment.isBefore(moment().subtract(1, "seconds"))
+      ) {
+        this.resetCurrentBest();
       }
     }
   },
   methods: {
-    percentageToHeight: percentage =>
-      "height:calc(" + percentage + "* 500px - 16px)"
+    speedToHeight: function(speed) {
+      const percentage = this.maxSpeed === 0 ? 1 : 1 - speed / this.maxSpeed;
+      return "height:calc(" + percentage + "* 500px - 16px)";
+    },
+    resetCurrentBest: function() {
+      this.currentBest = {
+        moment: moment(),
+        value: this.speed
+      };
+    }
   }
 };
 </script>
@@ -114,9 +110,9 @@ $padding: 4px;
     &.middle {
       margin-top: calc((#{$height} - 2 *#{$padding}) / 2 - 11px);
     }
-
     &.min {
       margin-top: calc(#{$height} - 2 *#{$padding} - 12px);
+      margin-left: -20px;
     }
     &.max {
       color: red;

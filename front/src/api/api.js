@@ -3,6 +3,12 @@
 export const API_IN = {
   SET_SPEED({ commit }, message) {
     commit('setSpeed', message.value);
+  },
+  REQUEST_START({ commit }, message) {
+    commit('addRequest', message.value);
+  },
+  REQUEST_END({ commit }, message) {
+    commit('deleteRequest', message.value);
   }
 };
 

@@ -4,6 +4,7 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
@@ -53,6 +54,14 @@ public class Ressources {
 			maxSpeed = speed;
 		LOG.info("speed : {}", speed);
 		webSocketClient.sendMessage(Action.SET_SPEED, speed);
+	}
+
+	public void startRequete(UUID id) {
+		webSocketClient.sendMessage(Action.REQUEST_START, id);
+	}
+
+	public void endRequete(UUID id) {
+		webSocketClient.sendMessage(Action.REQUEST_END, id);
 	}
 
 }

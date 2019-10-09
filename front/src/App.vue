@@ -1,8 +1,8 @@
 <template>
-  <v-app>
+  <v-app id="full-app">
     <v-app-bar app>
-      <v-toolbar-title class="headline text-uppercase">
-        <span>Bouygues Telecom</span>
+      <v-toolbar-title class="headline">
+        <span>Batterie de test</span>
       </v-toolbar-title>
       <v-spacer></v-spacer>
     </v-app-bar>
@@ -28,6 +28,6 @@ export default {
 @import "./style.scss";
 
 .app-background {
-  background: linear-gradient(150deg, white 20%, #{$greyBackground} 40% 100%);
+  background: linear-gradient(160deg, white 15%, #{$greyBackground} 30% 100%);
 }
 </style>
