@@ -7,7 +7,7 @@
       <v-spacer></v-spacer>
     </v-app-bar>
 
-    <v-content>
+    <v-content class="app-background">
       <Accueil />
     </v-content>
   </v-app>
@@ -23,3 +23,11 @@ export default {
   }
 };
 </script>
+
+<style lang="scss" scoped>
+@import "./style.scss";
+
+.app-background {
+  background: linear-gradient(150deg, white 20%, #{$greyBackground} 40% 100%);
+}
+</style>
