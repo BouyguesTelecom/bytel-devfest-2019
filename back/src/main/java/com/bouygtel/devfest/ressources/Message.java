@@ -1,9 +1,12 @@
 package com.bouygtel.devfest.ressources;
 
+/**
+ * Représente un message qui transite au sein du SI. 
+ */
 public class Message {
 
-	private Action action;
-	private Object value;
+	private Action action; // l'action menée
+	private Object value; // sa valeur
 
 	private Message() {
 		// Mapping

@@ -33,11 +33,24 @@ public class ControleurMessage {
 
 	public void nouveauMessage(long timestampMessage) {
 		LOG.info("Nouveau message à traiter, reçu à {}", timestampMessage);
-		ressources.ajouterFrappe();
 
-		UUID id = UUID.randomUUID();
-		ressources.startRequete(id);
-		executorService.schedule(() -> endRequete(id), 10, TimeUnit.SECONDS);
+		// On met ça dans un Executor, parce qu'on ne veut pas que le Thread qui gère le MIDI 
+		// Soit impacté si y a un souci de communication WebSocket.
+		executorService.schedule(() -> {
+			try {
+				// Tout ça c'est déléguable ailleurs
+				UUID id = UUID.randomUUID();
+				LOG.info("[TRAITEMENT] {}", id);
+				ressources.ajouterFrappe();
+				Thread.sleep(1000);
+				LOG.info("[ACQUITTEMENT] {}", id);
+				ressources.startRequete(id);
+				endRequete(id);
+			} catch (InterruptedException e) {
+				Thread.currentThread().interrupt();
+			}
+		}, 0, TimeUnit.SECONDS);
+
 	}
 
 	private void endRequete(UUID id) {

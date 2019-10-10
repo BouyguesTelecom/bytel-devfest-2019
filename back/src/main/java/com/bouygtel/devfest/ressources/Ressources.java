@@ -63,5 +63,4 @@ public class Ressources {
 	public void endRequete(UUID id) {
 		webSocketClient.sendMessage(Action.REQUEST_END, id);
 	}
-
 }

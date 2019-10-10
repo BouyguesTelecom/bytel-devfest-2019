@@ -16,5 +16,7 @@ Le front est en VueJs 3.0, avec Vuetify comme framework UI.
 
 - Installer [NodeJs](https://nodejs.org)
 - Installer le CLI de VueJS `npm i -g @vue/cli`
+- Installer le CLI de VueJS `npm i -g @vue/cli-service`
 - Se placer dans le dossier front
+- Lancer un `npm install`
 - Démarrer l'application `npm start`
