@@ -42,9 +42,9 @@ public class ControleurMessage {
 				UUID id = UUID.randomUUID();
 				LOG.info("[TRAITEMENT] {}", id);
 				ressources.ajouterFrappe();
-				Thread.sleep(1000);
 				LOG.info("[ACQUITTEMENT] {}", id);
 				ressources.startRequete(id);
+				Thread.sleep(4000); // Pour les feux d'artifice !
 				endRequete(id);
 			} catch (InterruptedException e) {
 				Thread.currentThread().interrupt();

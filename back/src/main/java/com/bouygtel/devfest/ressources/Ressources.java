@@ -41,7 +41,7 @@ public class Ressources {
 		sendSpeed();
 	}
 
-	public void ajouterFrappe() {
+	public synchronized void ajouterFrappe() {
 		frappes.add(Instant.now());
 		sendSpeed();
 	}
