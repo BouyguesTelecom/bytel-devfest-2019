@@ -5,8 +5,8 @@ package com.bouygtel.devfest.ressources;
  *
  */
 public enum Action {
-	SET_SPEED, //
-	GET_SPEED, //
+	SET_STATS, //
+	GET_STATS, //
 	RESET_COUNTER, //
 	REQUEST_START, //
 	REQUEST_END;

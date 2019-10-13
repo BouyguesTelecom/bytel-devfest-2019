@@ -41,12 +41,12 @@ public class ControleurMessage {
 				// Tout ça c'est déléguable ailleurs
 				UUID id = UUID.randomUUID();
 //				LOG.info("[TRAITEMENT] {}", id);
-				ressources.ajouterFrappe();
+				ressources.addHit();
 //				LOG.info("[ACQUITTEMENT] {}", id);
-				ressources.startRequete(id);
+				ressources.startRequest(id);
 				Thread.sleep(4000); // Pour les feux d'artifice !
 //				LOG.info("Fin de la requete {}", id);
-				ressources.endRequete(id);
+				ressources.endRequest(id);
 			} catch (InterruptedException e) {
 				Thread.currentThread().interrupt();
 			}

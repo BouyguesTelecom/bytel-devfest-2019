@@ -1,11 +1,7 @@
 package com.bouygtel.devfest.ressources;
 
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,46 +18,40 @@ public class Ressources {
 
 	private static final Logger LOG = LoggerFactory.getLogger(Ressources.class);
 
-	private static List<Instant> frappes = new ArrayList<>();
-	private static Long maxSpeed = 0L;
+	private final Stats stats;
 
 	private WebSocketClient webSocketClient;
 
 	public Ressources(WebSocketClient webSocketClient) {
 		this.webSocketClient = webSocketClient;
+		stats = new Stats();
 	}
 
 	@ActionExecuter(action = "RESET_COUNTER")
 	public void resetCounter() {
-		frappes = Collections.emptyList();
+		stats.reset();
 	}
 
-	@ActionExecuter(action = "GET_SPEED")
+	@ActionExecuter(action = "GET_STATS")
 	public void getCounter() {
-		sendSpeed();
+		sendStats();
 	}
 
-	public synchronized void ajouterFrappe() {
-		frappes.add(Instant.now());
-		sendSpeed();
+	public synchronized void addHit() {
+		stats.addHit(Instant.now());
+		sendStats();
 	}
 
-	public void sendSpeed() {
-		Long speed = frappes.stream()//
-				.dropWhile(instant -> Instant.now().minusSeconds(1).isAfter(instant))
-//				.filter(instant -> Instant.now().minusSeconds(1).isBefore(instant))//
-				.collect(Collectors.counting());
-		if (speed > maxSpeed)
-			maxSpeed = speed;
-//		LOG.info("speed : {}", speed);
-		webSocketClient.sendMessage(Action.SET_SPEED, speed);
+	public void sendStats() {
+		stats.update();
+		webSocketClient.sendMessage(Action.SET_STATS, stats);
 	}
 
-	public void startRequete(UUID id) {
+	public void startRequest(UUID id) {
 		webSocketClient.sendMessage(Action.REQUEST_START, id);
 	}
 
-	public void endRequete(UUID id) {
+	public void endRequest(UUID id) {
 		webSocketClient.sendMessage(Action.REQUEST_END, id);
 	}
 }

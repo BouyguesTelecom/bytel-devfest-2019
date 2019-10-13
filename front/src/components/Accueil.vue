@@ -28,14 +28,11 @@ export default {
   }),
   watch: {
     isConnected: function(value) {
-      if (value) this.getSpeed();
+      if (value) this.getStats();
     }
   },
   methods: {
-    ...mapActions(["resetCounter", "getSpeed"]),
-    sendMessage() {
-      this.$store.dispatch("sendMessage", { action: "SET_COUNTER" });
-    }
+    ...mapActions(["resetCounter", "getStats"])
   }
 };
 </script>

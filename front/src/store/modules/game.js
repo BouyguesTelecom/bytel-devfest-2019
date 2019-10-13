@@ -5,9 +5,9 @@ export default {
     requests: []
   },
   mutations: {
-    setSpeed(state, value) {
-      state.speed = value;
-      if (value > state.maxSpeed) state.maxSpeed = value;
+    setStats(state, value) {
+      state.speed = value.speed;
+      state.maxSpeed = value.maxSpeed;
     },
     addRequest(state, value) {
       state.requests.push(value);
