@@ -71,7 +71,6 @@ $padding: 4px;
 .volume-control {
   height: $height;
   width: $width;
-  background-color: $greyBackground;
   margin-right: 50px;
 
   .graduation {

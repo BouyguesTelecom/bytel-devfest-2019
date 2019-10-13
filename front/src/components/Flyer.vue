@@ -1,7 +1,7 @@
 <template>
   <div class="flyer" :style="{transform: `translate3d(${x}px, ${y}px, 0)`}">
     <!-- <v-icon>mdi-tilde</v-icon> -->
-    <v-img :src="img" :height="size" :width="size" aspect-ratio="1"></v-img>
+    <v-img :src="img" :height="size" :width="size" contain></v-img>
   </div>
 </template>
 
@@ -15,7 +15,7 @@ export default {
   props: ["request"],
   data: () => ({
     x: Math.random() * 200,
-    y: 700 + Math.random() * 200,
+    y: 600 + Math.random() * 200,
     size: Math.random() * 20 + 20,
     img: images[Math.floor(Math.random() * images.length)]
   }),
