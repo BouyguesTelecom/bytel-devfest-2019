@@ -48,11 +48,12 @@ public class Ressources {
 
 	public void sendSpeed() {
 		Long speed = frappes.stream()//
-				.filter(instant -> Instant.now().minusSeconds(1).isBefore(instant))//
+				.dropWhile(instant -> Instant.now().minusSeconds(1).isAfter(instant))
+//				.filter(instant -> Instant.now().minusSeconds(1).isBefore(instant))//
 				.collect(Collectors.counting());
 		if (speed > maxSpeed)
 			maxSpeed = speed;
-		LOG.info("speed : {}", speed);
+//		LOG.info("speed : {}", speed);
 		webSocketClient.sendMessage(Action.SET_SPEED, speed);
 	}
 

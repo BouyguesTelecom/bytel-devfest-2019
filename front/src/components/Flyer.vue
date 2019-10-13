@@ -6,8 +6,10 @@
 </template>
 
 <script>
-const images = [require("../assets/firework.gif")];
-console.log("ici");
+const images = [
+  // require("../assets/firework.gif"),
+  require("../assets/logo.png")
+];
 
 export default {
   props: ["request"],
@@ -25,8 +27,7 @@ export default {
       this.x += Math.random() * 100;
       this.y -= Math.random() * 100;
     }
-  },
-  destroyed: () => console.log("destroy")
+  }
 };
 </script>
 

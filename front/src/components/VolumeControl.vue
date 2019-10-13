@@ -1,5 +1,5 @@
 <template>
-  <v-container class="d-flex justify-end">
+  <div class="d-flex justify-end">
     <div class="volume-control">
       <div class="graduation graduation-verticale">
         <div class="degrade">
@@ -16,7 +16,7 @@
       <div class="ordonnee middle">{{halfMaxSpeed}}</div>
       <div class="ordonnee min">0</div>
     </div>
-  </v-container>
+  </div>
 </template>
 
 <script>
@@ -72,6 +72,7 @@ $padding: 4px;
   height: $height;
   width: $width;
   background-color: $greyBackground;
+  margin-right: 50px;
 
   .graduation {
     position: absolute;

@@ -24,12 +24,12 @@ public class MidiExecutorReceiver implements Receiver {
 	@Override
 	public void send(MidiMessage message, long timeStamp) {
 		final int status = message.getStatus();
-		LOG.info("Réception d'un msg midi de status {}", status);
+//		LOG.info("Réception d'un msg midi de status {}", status);
 		if (status >= 144) {
-			LOG.info("Réception d'un msg de début de note !");
+//			LOG.info("Réception d'un msg de début de note !");
 			consommateur.accept(timeStamp);
 		} else {
-			LOG.info("Réception d'un msg de fin de note");
+//			LOG.info("Réception d'un msg de fin de note");
 		}
 	}
 

@@ -30,7 +30,7 @@ public class WebSocketClient implements WebSocketHandler {
 		this.messageHandler = messageHandler;
 	}
 
-	public void sendMessage(Message message) {
+	public synchronized void sendMessage(Message message) {
 		if (webSocketSession != null) {
 			try {
 				webSocketSession.sendMessage(new TextMessage(MAPPER.writeValueAsBytes(message)));
@@ -55,7 +55,7 @@ public class WebSocketClient implements WebSocketHandler {
 
 	@Override
 	public void handleMessage(WebSocketSession session, WebSocketMessage<?> messageIn) throws Exception {
-		LOG.info("Reception du message: {}", messageIn.getPayload());
+//		LOG.info("Reception du message: {}", messageIn.getPayload());
 		Message message = MAPPER.readValue((String) messageIn.getPayload(), Message.class);
 		messageHandler.handleMessage(message);
 	}

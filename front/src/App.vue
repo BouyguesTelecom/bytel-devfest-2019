@@ -28,6 +28,12 @@ export default {
 @import "./style.scss";
 
 .app-background {
-  background: linear-gradient(160deg, white 15%, #{$greyBackground} 30% 100%);
+  background: linear-gradient(
+    155deg,
+    white 20%,
+    // rgb(0, 157, 204),
+      rgb(73, 139, 201),
+    #{$greyBackground} 50% 100%
+  );
 }
 </style>
