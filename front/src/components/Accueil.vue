@@ -3,11 +3,13 @@
     <div class="isConnected" :class="{ok: isConnected}">•</div>
 
     <div v-show="showReady" class="encouragements align-self-center justify-lg-space-between">
-      <div class="a-vos-marques d-flex flex-row">À vos marques...</div>
-      <div class="prets d-flex justify-lg-space-between align-center">
-        <v-img src="../assets/drummer.png" height="200" width="200" contain></v-img>Prêts?
+      <div class="a-vos-marques d-flex flex-row justify-start">
+        À vos baguettes...
+        <v-img src="../assets/baguettes.png" height="100" width="100" contain class="orange-img"></v-img>
       </div>
-      <span class="battez align-self-center">Battez !</span>
+      <div class="prets d-flex justify-end align-center">Prêts?</div>
+      <v-img src="../assets/drummer.png" height="200" width="200" contain class="drummer"></v-img>
+      <span class="battez align-self-center justify-end">Battez !</span>
     </div>
 
     <volume-control :speed="speed" :maxSpeed="maxSpeed" class="volume-control"></volume-control>
@@ -99,7 +101,7 @@ export default {
 
   color: yellowgreen;
   // font-weight: 500;
-  font-size: 50px;
+  font-size: 60px;
   background-color: rgba(0, 0, 0, 0.2);
   padding: 20px 40px;
   border-radius: 20px;
@@ -107,9 +109,26 @@ export default {
 
   font-weight: normal;
   font-style: normal;
-  font-family: "Road Rage", Arial;
+  font-family: "Metal Mania", cursive;
 
-  .a-vos-marques {
+  .orange-img {
+    filter: contrast(100%) //
+      invert(30%) //
+      sepia(50%) //
+      saturate(10000%) //
+      hue-rotate(20deg) //
+      drop-shadow(2px 4px 6px black);
+  }
+  .drummer {
+    position: absolute;
+    top: calc(50% - 100px);
+    left: calc(50% - 100px);
+
+    filter: contrast(100%) //
+      sepia(50%) //
+      saturate(10000%) //
+      hue-rotate(20deg) //
+      drop-shadow(2px 4px 6px black);
   }
   .battez {
     font-size: 70px;
