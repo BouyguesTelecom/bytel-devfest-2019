@@ -31,6 +31,7 @@ export default {
   },
   actions: {
     sendMessage: function(context, message) {
+      console.log('sending : ', message);
       Vue.prototype.$socket.send(JSON.stringify(message));
     },
     ...api

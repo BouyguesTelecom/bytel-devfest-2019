@@ -1,8 +1,14 @@
 // Ensemble des entrées/sorties d'api correspondants au champ 'action' du message Websocket
 // Injectées en tant qu'actions dans le store
 export const API_IN = {
-  SET_COUNTER({ commit }, message) {
-    commit('setCounter', message.value);
+  SET_STATS({ commit }, message) {
+    commit('setStats', message.value);
+  },
+  REQUEST_START({ commit }, message) {
+    commit('addRequest', message.value);
+  },
+  REQUEST_END({ commit }, message) {
+    commit('deleteRequest', message.value);
   }
 };
 
@@ -10,8 +16,8 @@ export const API_OUT = {
   resetCounter({ dispatch }) {
     send(dispatch, 'RESET_COUNTER');
   },
-  getCounter({ dispatch }) {
-    send(dispatch, 'GET_COUNTER');
+  getStats({ dispatch }) {
+    send(dispatch, 'GET_STATS');
   }
 };
 
