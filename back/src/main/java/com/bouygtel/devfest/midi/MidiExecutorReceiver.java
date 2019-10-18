@@ -15,19 +15,19 @@ public class MidiExecutorReceiver implements Receiver {
 
 	private static final Logger LOG = LoggerFactory.getLogger(MidiExecutorReceiver.class);
 
-	private Consumer<Long> consommateur;
+	private Consumer<CustomMidiMessage> consommateur;
 
-	public MidiExecutorReceiver(Consumer<Long> consommateur) {
+	public MidiExecutorReceiver(Consumer<CustomMidiMessage> consommateur) {
 		this.consommateur = consommateur;
 	}
 
 	@Override
-	public void send(MidiMessage message, long timeStamp) {
+	public void send(MidiMessage message, long timestamp) {
 		final int status = message.getStatus();
-//		LOG.info("Réception d'un msg midi de status {}", status);
-		if (status >= 144) {
+		if (status >= 144) { // correspond au NoteOn
 //			LOG.info("Réception d'un msg de début de note !");
-			consommateur.accept(timeStamp);
+			CustomMidiMessage customMidiMessage = new CustomMidiMessage(timestamp, message.getMessage()[2]);
+			consommateur.accept(customMidiMessage);
 		} else {
 //			LOG.info("Réception d'un msg de fin de note");
 		}

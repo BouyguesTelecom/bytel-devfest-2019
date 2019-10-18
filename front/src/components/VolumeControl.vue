@@ -15,6 +15,11 @@
       <div class="ordonnee" :class="{max: maxSpeed === speed && maxSpeed > 0}">{{maxSpeed}}</div>
       <div class="ordonnee middle">{{halfMaxSpeed}}</div>
       <div class="ordonnee min">0</div>
+      <div
+        class="ordonnee right maxSpeedSession"
+        :class="{max: maxSpeed === maxSpeedSession && maxSpeed > 0}"
+        :style="speedToMargin(maxSpeedSession)"
+      >{{maxSpeedSession}}</div>
     </div>
   </div>
 </template>
@@ -23,7 +28,7 @@
 import * as moment from "moment";
 
 export default {
-  props: ["speed", "maxSpeed"],
+  props: ["speed", "maxSpeed", "maxSpeedSession"],
   data: () => ({
     currentBest: {
       moment: moment(),
@@ -35,25 +40,36 @@ export default {
       return Math.round(this.maxSpeed / 2);
     }
   },
-  watch: {
-    speed: function(speed) {
+  mounted: function() {
+    setInterval(() => {
       if (
-        speed > this.currentBest.value ||
-        this.currentBest.moment.isBefore(moment().subtract(1, "seconds"))
+        this.currentBest.moment.isBefore(moment().subtract(1, "seconds")) &&
+        this.speed !== this.currentBest.value
       ) {
-        this.resetCurrentBest();
+        this.resetCurrentBest(this.speed);
+      }
+    }, 500);
+  },
+  watch: {
+    speed: function(newValue) {
+      if (newValue > this.currentBest.value) {
+        this.resetCurrentBest(newValue);
       }
     }
   },
   methods: {
     speedToHeight: function(speed) {
       const percentage = this.maxSpeed === 0 ? 1 : 1 - speed / this.maxSpeed;
-      return "height:calc(" + percentage + "* 500px - 16px)";
+      return "height:calc(" + percentage + " * 484px)";
     },
-    resetCurrentBest: function() {
+    speedToMargin: function(speed) {
+      const percentage = this.maxSpeed === 0 ? 1 : 1 - speed / this.maxSpeed;
+      return "margin-top:calc(489px * " + percentage + " - 11px)";
+    },
+    resetCurrentBest: function(newValue) {
       this.currentBest = {
         moment: moment(),
-        value: this.speed
+        value: newValue
       };
     }
   }
@@ -118,9 +134,26 @@ $padding: 4px;
       color: red;
       font-weight: bold;
       font-size: 35px;
-      margin-top: -25px;
+      margin-top: -25px !important;
       margin-left: -50px;
       transition: all 0.2s;
+    }
+    &.right {
+      right: 0;
+      margin-left: 0;
+      margin-right: -40px;
+
+      &.maxSpeedSession {
+        padding: 2px 5px;
+        border-bottom: 2px solid #721717;
+        border-radius: 20px;
+        width: 30px;
+        text-align: center;
+        &.max {
+          width: 50px;
+          margin-right: -60px;
+        }
+      }
     }
   }
 

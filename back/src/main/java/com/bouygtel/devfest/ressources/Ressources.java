@@ -1,10 +1,7 @@
 package com.bouygtel.devfest.ressources;
 
 import java.time.Instant;
-import java.util.UUID;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 
 import com.bouygtel.devfest.websocket.ActionExecuter;
@@ -15,8 +12,6 @@ import com.bouygtel.devfest.websocket.WebSocketClient;
  */
 @Controller
 public class Ressources {
-
-	private static final Logger LOG = LoggerFactory.getLogger(Ressources.class);
 
 	private final Stats stats;
 
@@ -47,11 +42,15 @@ public class Ressources {
 		webSocketClient.sendMessage(Action.SET_STATS, stats);
 	}
 
-	public void startRequest(UUID id) {
-		webSocketClient.sendMessage(Action.REQUEST_START, id);
+	public void startRequest(int velocity) {
+		webSocketClient.sendMessage(Action.REQUEST_START, velocity);
 	}
 
-	public void endRequest(UUID id) {
-		webSocketClient.sendMessage(Action.REQUEST_END, id);
+	public void endRequest(int velocity) {
+		webSocketClient.sendMessage(Action.REQUEST_END, velocity);
+	}
+
+	public Stats getStats() {
+		return stats;
 	}
 }
