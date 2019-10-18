@@ -1,13 +1,13 @@
 package com.bouygtel.devfest.controller;
 
-import java.util.UUID;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 
+import com.bouygtel.devfest.aws.AWSConfig.LambdaService;
+import com.bouygtel.devfest.aws.LambdaIn;
+import com.bouygtel.devfest.midi.CustomMidiMessage;
 import com.bouygtel.devfest.ressources.Ressources;
 
 /**
@@ -20,33 +20,28 @@ import com.bouygtel.devfest.ressources.Ressources;
 @Controller
 public class ControleurMessage {
 
-	private static final Logger LOG = LoggerFactory.getLogger(ControleurMessage.class);
-
 	private final Ressources ressources;
 	private final ExecutorService executorService;
+	private final LambdaService lambdaService;
 
-	public ControleurMessage(Ressources ressources) {
+	public ControleurMessage(Ressources ressources, LambdaService lambdaService) {
 		this.ressources = ressources;
+		this.lambdaService = lambdaService;
 		executorService = Executors.newFixedThreadPool(1000);
 	}
 
-	public void nouveauMessage(long timestampMessage) {
-//		LOG.info("Nouveau message à traiter, reçu à {}", timestampMessage);
-
+	public void nouveauMessage(CustomMidiMessage midiMessage) {
 		// On met ça dans un Executor, parce qu'on ne veut pas que le Thread qui gère le
 		// MIDI
 		// Soit impacté si y a un souci de communication WebSocket.
 		executorService.execute(() -> {
 			try {
 				// Tout ça c'est déléguable ailleurs
-				UUID id = UUID.randomUUID();
-//				LOG.info("[TRAITEMENT] {}", id);
 				ressources.addHit();
-//				LOG.info("[ACQUITTEMENT] {}", id);
-				ressources.startRequest(id);
-				Thread.sleep(4000); // Pour les feux d'artifice !
-//				LOG.info("Fin de la requete {}", id);
-				ressources.endRequest(id);
+				ressources.startRequest(midiMessage.getVelocity());
+				lambdaService.call(new LambdaIn(ressources.getStats().getSession().getUiidSession()));
+				Thread.sleep(2000); // Pour les feux d'artifice !
+				ressources.endRequest(midiMessage.getVelocity());
 			} catch (InterruptedException e) {
 				Thread.currentThread().interrupt();
 			}

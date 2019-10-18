@@ -3,6 +3,10 @@ package com.bouygtel.devfest.aws;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import com.amazonaws.ClientConfiguration;
+import com.amazonaws.regions.Regions;
+import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
+import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
 import com.amazonaws.services.lambda.AWSLambda;
 import com.amazonaws.services.lambda.AWSLambdaClientBuilder;
 import com.amazonaws.services.lambda.invoke.LambdaFunction;
@@ -13,8 +17,12 @@ public class AWSConfig {
 
 	@Bean
 	public LambdaService initAWSLambdaClient() {
+		ClientConfiguration config = new ClientConfiguration();
+		config.setRequestTimeout(30000);
+		config.setClientExecutionTimeout(30000);
 		AWSLambda awsLambda = AWSLambdaClientBuilder.standard()//
 				.withRegion("eu-west-3")//
+				.withClientConfiguration(config)//
 				.build();
 		return LambdaInvokerFactory.builder()//
 				.lambdaClient(awsLambda)//
@@ -22,8 +30,13 @@ public class AWSConfig {
 	}
 
 	public interface LambdaService {
-		@LambdaFunction(functionName = "devfest-2019")
-		Object midiEventReceiver();
+		@LambdaFunction(functionName = "devfest")
+		Object call(LambdaIn in);
+	}
+
+	@Bean
+	public AmazonDynamoDB amazonDynamoDBClient() {
+		return AmazonDynamoDBClientBuilder.standard().withRegion(Regions.EU_WEST_3).build();
 	}
 
 }

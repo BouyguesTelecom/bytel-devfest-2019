@@ -25,20 +25,19 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 @import "./style.scss";
+
+html {
+  overflow: hidden;
+}
 
 .logo {
   margin-right: 20px;
 }
 
 .app-background {
-  background: linear-gradient(
-    155deg,
-    white 15%,
-    rgb(73, 139, 201),
-    #{$greyBackground} 45% 100%
-  );
+  background: linear-gradient(135deg, white 17%, #498bc9, #2c2c2c 38% 100%);
 }
 .headline {
   span {

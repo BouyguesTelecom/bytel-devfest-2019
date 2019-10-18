@@ -2,7 +2,10 @@
   <div class="d-flex fill-height app-content">
     <div class="isConnected" :class="{ok: isConnected}">•</div>
 
-    <div v-show="showReady" class="encouragements align-self-center justify-lg-space-between">
+    <div
+      v-show="!isSessionActive"
+      class="encouragements align-self-center justify-lg-space-between"
+    >
       <div class="a-vos-marques d-flex flex-row justify-start">
         À vos baguettes...
         <v-img src="../assets/baguettes.png" height="100" width="100" contain class="orange-img"></v-img>
@@ -12,9 +15,16 @@
       <span class="battez align-self-center justify-end">Battez !</span>
     </div>
 
-    <volume-control :speed="speed" :maxSpeed="maxSpeed" class="volume-control"></volume-control>
+    <volume-control
+      :speed="speed"
+      :maxSpeed="maxSpeedTotal"
+      :maxSpeedSession="maxSpeedSession"
+      class="volume-control"
+    ></volume-control>
 
-    <flyer :request="request" v-for="request in requests" :key="request"></flyer>
+    <flyer :size="request.size" v-for="request in requests" :key="request.id"></flyer>
+
+    <lambda-counter :number="nombreLambdas" class="lambda-counter"></lambda-counter>
   </div>
 </template>
  
@@ -22,40 +32,32 @@
 import { mapState, mapActions } from "vuex";
 import VolumeControlVue from "./VolumeControl.vue";
 import FlyerVue from "./Flyer.vue";
+import LambdaCounterVue from "./LambdaCounter.vue";
 
 export default {
   components: {
     "volume-control": VolumeControlVue,
-    flyer: FlyerVue
+    flyer: FlyerVue,
+    lambdaCounter: LambdaCounterVue
   },
-  data: () => ({
-    showReady: true
-  }),
   computed: mapState({
     speed: state => state.game.speed,
-    maxSpeed: state => state.game.maxSpeed,
+    maxSpeedSession: state => state.game.maxSpeedSession,
+    maxSpeedTotal: state => state.game.maxSpeedTotal,
+    isSessionActive: state => state.game.isSessionActive,
+    nombreLambdas: state => state.game.nombreLambdas,
+    nombreLambdasMax: state => state.game.nombreLambdasMax,
+    nombreLambdasSession: state => state.game.nombreLambdasSession,
     requests: state => state.game.requests,
     isConnected: state => state.websocket.isConnected
   }),
   watch: {
     isConnected: function(value) {
       if (value) this.getStats();
-    },
-    speed: function(value) {
-      if (this.showReady && value !== 0) {
-        this.showReady = false;
-      }
     }
   },
   methods: {
     ...mapActions(["resetCounter", "getStats"])
-  },
-  mounted: function() {
-    setInterval(() => {
-      if (this.speed == 0) {
-        this.showReady = true;
-      }
-    }, 30000);
   }
 };
 </script>
@@ -81,7 +83,7 @@ export default {
 .volume-control {
   position: absolute;
   bottom: 20px;
-  right: 20px;
+  right: 50px;
 }
 
 .encouragements {
@@ -91,6 +93,7 @@ export default {
   position: absolute;
   display: flex;
   flex-direction: column;
+  z-index: 1000;
 
   width: $width;
   height: $height;
@@ -133,5 +136,9 @@ export default {
   .battez {
     font-size: 70px;
   }
+}
+.lambda-counter {
+  width: 800px;
+  margin-left: 350px;
 }
 </style>
