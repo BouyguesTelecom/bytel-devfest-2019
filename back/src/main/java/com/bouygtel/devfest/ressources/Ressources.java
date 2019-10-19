@@ -17,6 +17,8 @@ public class Ressources {
 
 	private WebSocketClient webSocketClient;
 
+	private long lastSendStat = 0;
+
 	public Ressources(WebSocketClient webSocketClient) {
 		this.webSocketClient = webSocketClient;
 		stats = new Stats();
@@ -38,6 +40,13 @@ public class Ressources {
 	}
 
 	public void sendStats() {
+		// Antispam pour éviter de faire lager le front
+		if (System.currentTimeMillis() - lastSendStat < 50) {
+			return;
+		}
+		lastSendStat = System.currentTimeMillis();
+
+		// Mise à jour des stats
 		stats.update();
 		webSocketClient.sendMessage(Action.SET_STATS, stats);
 	}

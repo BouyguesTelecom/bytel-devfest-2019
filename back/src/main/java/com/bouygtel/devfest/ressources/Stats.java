@@ -1,6 +1,11 @@
 package com.bouygtel.devfest.ressources;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.time.Instant;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -8,8 +13,17 @@ import java.util.UUID;
 
 public class Stats {
 
+	private static final Logger LOGGER = LoggerFactory.getLogger(Stats.class);
+
 	private Long speed;
 	private Long maxSpeed;
+
+	private Long meanSpeed;
+	private Long maxMeanSpeed;
+
+	private int meanTime = 10;
+
+	@JsonIgnore
 	private List<Instant> hits;
 	private Session session;
 	private int lambdasUtilisees; // on aura le nb de lambda de la session en cours / terminée
@@ -18,6 +32,8 @@ public class Stats {
 	public Stats() {
 		speed = 0L;
 		maxSpeed = 0L;
+		meanSpeed = 0L;
+		maxMeanSpeed = 0L;
 		hits = new ArrayList<>();
 		session = new Session();
 	}
@@ -39,6 +55,14 @@ public class Stats {
 
 	public void setMaxSpeed(Long maxSpeed) {
 		this.maxSpeed = maxSpeed;
+	}
+
+	public Long getMeanSpeed() {
+		return meanSpeed;
+	}
+
+	public Long getMaxMeanSpeed() {
+		return maxMeanSpeed;
 	}
 
 	public List<Instant> getHits() {
@@ -72,6 +96,9 @@ public class Stats {
 	}
 
 	public synchronized Long update() {
+		cleanHits();
+
+		// Calcul de la vitesse instantanée
 		speed = hits.stream()//
 				.dropWhile(instant -> Instant.now().minusSeconds(1).isAfter(instant))//
 				.count();
@@ -80,6 +107,16 @@ public class Stats {
 			maxSpeed = speed;
 		}
 
+		// Calcul de la vitesse moyenne sur les X dernieres secondes
+		meanSpeed = hits.stream()//
+				.dropWhile(instant -> Instant.now().minusSeconds(meanTime).isAfter(instant))//
+				.count()/meanTime;
+
+		if (meanSpeed > maxMeanSpeed) {
+			maxMeanSpeed = meanSpeed;
+		}
+
+		// Gestion des sessions
 		if (speed > 0 && !session.isActive()) {
 			startSession();
 		} else if (hits.stream()//
@@ -87,8 +124,12 @@ public class Stats {
 			closeSession();
 		}
 
+		// Mise à jour de la session
 		if (speed > session.getMaxSpeed()) {
 			session.setMaxSpeed(speed);
+		}
+		if (meanSpeed > session.getMaxMeanSpeed()) {
+			session.setMaxMeanSpeed(meanSpeed);
 		}
 
 		if (session.getLambdasUtilisees() > maxLambdasUtilisees) {
@@ -114,4 +155,13 @@ public class Stats {
 		this.lambdasUtilisees = lambdasUtilisees;
 	}
 
+
+	private void cleanHits() {
+		// Suppression des hits trop anciens
+		if (hits.size() > 800 && hits.get(0).isBefore(Instant.now().minusSeconds(40))) {
+			LOGGER.info("Suppression des hits trop anciens");
+			Instant outdatedThreshold = Instant.now().minusSeconds(30);
+			hits.removeIf(hit -> hit.isBefore(outdatedThreshold));
+		}
+	}
 }

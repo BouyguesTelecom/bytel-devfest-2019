@@ -5,6 +5,9 @@ export default {
     speed: 0,
     maxSpeedTotal: 0,
     maxSpeedSession: 0,
+    meanSpeed: 0,
+    maxMeanSpeed: 0,
+    maxMeanSpeedSession: 0,
     isSessionActive: false,
     nombreLambdas: 0,
     nombreLambdasMax: 0,
@@ -16,6 +19,9 @@ export default {
       state.speed = value.speed;
       state.maxSpeedTotal = value.maxSpeed;
       state.maxSpeedSession = value.session.maxSpeed;
+      state.meanSpeed = value.meanSpeed;
+      state.maxMeanSpeed = value.maxMeanSpeed;
+      state.maxSpeedSession = value.session.maxMeanSpeed;
       state.isSessionActive = value.session.active;
       state.nombreLambdasMax = value.maxLambdasUtilisees;
       state.nombreLambdas = value.lambdasUtilisees;
