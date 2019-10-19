@@ -3,6 +3,16 @@
     <div class="isConnected" :class="{ok: isConnected}">•</div>
 
     <div
+      class="mean-gauge align-self-center justify-lg-space-between"
+    >
+      <mean-speed-control
+        :speed="meanSpeed"
+        :maxSpeed="maxMeanSpeed"
+        :maxSpeedSession="maxMeanSpeedSession"
+      />
+    </div>
+
+    <div
       v-show="!isSessionActive"
       class="encouragements align-self-center justify-lg-space-between"
     >
@@ -31,12 +41,14 @@
 <script>
 import { mapState, mapActions } from "vuex";
 import VolumeControlVue from "./VolumeControl.vue";
+import MeanSpeedControl from "./MeanSpeedControl.vue";
 import FlyerVue from "./Flyer.vue";
 import LambdaCounterVue from "./LambdaCounter.vue";
 
 export default {
   components: {
     "volume-control": VolumeControlVue,
+    "mean-speed-control": MeanSpeedControl,
     flyer: FlyerVue,
     lambdaCounter: LambdaCounterVue
   },
@@ -44,6 +56,9 @@ export default {
     speed: state => state.game.speed,
     maxSpeedSession: state => state.game.maxSpeedSession,
     maxSpeedTotal: state => state.game.maxSpeedTotal,
+    meanSpeed: state => state.game.meanSpeed,
+    maxMeanSpeed: state => state.game.maxMeanSpeed,
+    maxMeanSpeedSession: state => state.game.maxMeanSpeedSession,
     isSessionActive: state => state.game.isSessionActive,
     nombreLambdas: state => state.game.nombreLambdas,
     nombreLambdasMax: state => state.game.nombreLambdasMax,
@@ -82,8 +97,13 @@ export default {
 
 .volume-control {
   position: absolute;
-  bottom: 20px;
-  right: 50px;
+  bottom: 10px;
+  right: 85px;
+}
+.mean-gauge {
+  position: absolute;
+  top: 80px;
+  right: 20px;
 }
 
 .encouragements {

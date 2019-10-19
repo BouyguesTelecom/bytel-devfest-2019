@@ -6,6 +6,7 @@ public class Session {
 
 	private boolean isActive = false;
 	private Long maxSpeed = 0L;
+	private Long maxMeanSpeed = 0L;
 	private String uiidSession = UUID.randomUUID().toString(); // pour ne pas avoir à faire un constructeur, on
 																// n'instancie cette classe qu'une fois
 
@@ -42,5 +43,13 @@ public class Session {
 
 	public void setLambdasUtilisees(int lambdasUtilisees) {
 		this.lambdasUtilisees = lambdasUtilisees;
+	}
+
+	public Long getMaxMeanSpeed() {
+		return maxMeanSpeed;
+	}
+
+	public void setMaxMeanSpeed(Long maxMeanSpeed) {
+		this.maxMeanSpeed = maxMeanSpeed;
 	}
 }

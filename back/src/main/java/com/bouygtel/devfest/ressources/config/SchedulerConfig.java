@@ -34,7 +34,7 @@ public class SchedulerConfig {
 		return new ConcurrentTaskScheduler();
 	}
 
-	@Scheduled(fixedDelay = 500)
+	@Scheduled(fixedDelay = 200)
 	public void sendSpeed() {
 		ressources.sendStats();
 	}
