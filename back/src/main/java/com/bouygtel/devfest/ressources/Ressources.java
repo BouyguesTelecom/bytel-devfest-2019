@@ -2,6 +2,7 @@ package com.bouygtel.devfest.ressources;
 
 import java.time.Instant;
 
+import com.bouygtel.devfest.light.LightController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -21,10 +22,13 @@ public class Ressources {
 
 	private WebSocketClient webSocketClient;
 
+	private LightController lightController;
+
 	private long lastSendStat = 0;
 
-	public Ressources(WebSocketClient webSocketClient) {
+	public Ressources(WebSocketClient webSocketClient, LightController lightController) {
 		this.webSocketClient = webSocketClient;
+		this.lightController = lightController;
 		stats = new Stats();
 	}
 
@@ -38,7 +42,7 @@ public class Ressources {
 		sendStats();
 	}
 
-	public synchronized void addHit() {
+	public void addHit() {
 		stats.addHit(Instant.now());
 		sendStats();
 	}
@@ -52,6 +56,7 @@ public class Ressources {
 
 		// Mise à jour des stats
 		stats.update();
+		lightController.changeValue(stats.getMeanSpeed());
 		webSocketClient.sendMessage(Action.SET_STATS, stats);
 	}
 
