@@ -2,14 +2,6 @@
   <div class="d-flex fill-height app-content">
     <div class="isConnected" :class="{ok: isConnected}">•</div>
 
-    <!-- <div class="mean-gauge align-self-center justify-lg-space-between">
-      <mean-speed-control
-        :speed="meanSpeed"
-        :maxSpeed="maxMeanSpeed"
-        :maxSpeedSession="maxMeanSpeedSession"
-      />
-    </div>-->
-
     <div
       v-show="!isSessionActive"
       class="encouragements align-self-center justify-lg-space-between"

@@ -29,12 +29,14 @@ export default {
       return n / nbParLigne > n % nbParLigne && n % nbParLigne != 0;
     },
     numberWithHidden: nb => {
-      let n = Math.floor(nb / nbParLigne);
-      if (nb > 38) n++;
-      if (nb > 51) n++;
-      if (nb > 60) n++;
-      if (nb > 63) n++;
-      //J'avoue mon échec, j'ai pas trouvé la bonne règle de calcul, je corrige les déviations
+      let n = 0;
+      let sum = 0;
+      for (let i = 11; i > 0; i--) {
+        sum += i;
+        if (nb > sum) {
+          n++;
+        }
+      }
       return nb + (n * (n + 1)) / 2;
     }
   }
