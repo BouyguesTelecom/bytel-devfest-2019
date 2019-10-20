@@ -15,11 +15,16 @@ import com.amazonaws.services.lambda.invoke.LambdaInvokerFactory;
 @Configuration
 public class AWSConfig {
 
-	@Bean
-	public LambdaService initAWSLambdaClient() {
-		ClientConfiguration config = new ClientConfiguration();
+	private static ClientConfiguration config;
+
+	static {
+		config = new ClientConfiguration();
 		config.setRequestTimeout(30000);
 		config.setClientExecutionTimeout(30000);
+	}
+
+	@Bean
+	public LambdaService initAWSLambdaClient() {
 		AWSLambda awsLambda = AWSLambdaClientBuilder.standard()//
 				.withRegion("eu-west-3")//
 				.withClientConfiguration(config)//
@@ -36,7 +41,10 @@ public class AWSConfig {
 
 	@Bean
 	public AmazonDynamoDB amazonDynamoDBClient() {
-		return AmazonDynamoDBClientBuilder.standard().withRegion(Regions.EU_WEST_3).build();
+		return AmazonDynamoDBClientBuilder.standard()//
+				.withRegion(Regions.EU_WEST_3)//
+				.withClientConfiguration(config)//
+				.build();
 	}
 
 }

@@ -13,8 +13,8 @@ export const API_IN = {
 };
 
 export const API_OUT = {
-  resetCounter({ dispatch }) {
-    send(dispatch, 'RESET_COUNTER');
+  resetStats({ dispatch }) {
+    send(dispatch, 'RESET_STATS');
   },
   getStats({ dispatch }) {
     send(dispatch, 'GET_STATS');

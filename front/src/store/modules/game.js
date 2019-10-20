@@ -21,7 +21,7 @@ export default {
       state.maxSpeedSession = value.session.maxSpeed;
       state.meanSpeed = value.meanSpeed;
       state.maxMeanSpeed = value.maxMeanSpeed;
-      state.maxSpeedSession = value.session.maxMeanSpeed;
+      state.maxMeanSpeedSession = value.session.maxMeanSpeed;
       state.isSessionActive = value.session.active;
       state.nombreLambdasMax = value.maxLambdasUtilisees;
       state.nombreLambdas = value.lambdasUtilisees;

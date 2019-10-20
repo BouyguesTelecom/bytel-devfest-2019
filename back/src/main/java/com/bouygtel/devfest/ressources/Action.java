@@ -7,7 +7,7 @@ package com.bouygtel.devfest.ressources;
 public enum Action {
 	SET_STATS, //
 	GET_STATS, //
-	RESET_COUNTER, //
+	RESET_STATS, //
 	REQUEST_START, //
 	REQUEST_END;
 }
