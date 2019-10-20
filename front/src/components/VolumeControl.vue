@@ -1,5 +1,9 @@
 <template>
-  <div class="d-flex justify-end">
+  <div class="d-flex flex-column">
+    <div
+      class="control-title"
+      :class="{max: maxSpeedSession === maxSpeed && maxSpeedSession > 0}"
+    >{{title}}</div>
     <div class="volume-control">
       <div class="graduation graduation-verticale">
         <div class="degrade">
@@ -12,7 +16,10 @@
       <div class="graduation graduation-horizontale seconde-graduation"></div>
       <div class="graduation graduation-horizontale graduation-droite"></div>
       <div class="graduation graduation-horizontale graduation-droite seconde-graduation"></div>
-      <div class="ordonnee" :class="{max: maxSpeed === speed && maxSpeed > 0}">{{maxSpeed}}</div>
+      <div
+        class="ordonnee"
+        :class="{max: maxSpeed === speed && maxSpeed > 0, decimal: isDecimal}"
+      >{{maxSpeed}}</div>
       <div class="ordonnee middle">{{halfMaxSpeed}}</div>
       <div class="ordonnee min">0</div>
       <div
@@ -28,7 +35,7 @@
 import * as moment from "moment";
 
 export default {
-  props: ["speed", "maxSpeed", "maxSpeedSession"],
+  props: ["speed", "maxSpeed", "maxSpeedSession", "isDecimal", "title"],
   data: () => ({
     currentBest: {
       moment: moment(),
@@ -48,7 +55,7 @@ export default {
       ) {
         this.resetCurrentBest(this.speed);
       }
-    }, 500);
+    }, 200);
   },
   watch: {
     speed: function(newValue) {
@@ -60,11 +67,11 @@ export default {
   methods: {
     speedToHeight: function(speed) {
       const percentage = this.maxSpeed === 0 ? 1 : 1 - speed / this.maxSpeed;
-      return "height:calc(" + percentage + " * 484px)";
+      return "height:calc(" + percentage + " * 684px)";
     },
     speedToMargin: function(speed) {
       const percentage = this.maxSpeed === 0 ? 1 : 1 - speed / this.maxSpeed;
-      return "margin-top:calc(489px * " + percentage + " - 11px)";
+      return "margin-top:calc(689px * " + percentage + " - 11px)";
     },
     resetCurrentBest: function(newValue) {
       this.currentBest = {
@@ -80,8 +87,8 @@ export default {
 @import "../style.scss";
 
 $darkenGreyBackground: darken($greyBackground, 10%);
-$height: 500px;
-$width: 60px;
+$height: 700px;
+$width: 80px;
 $padding: 4px;
 
 .volume-control {
@@ -119,29 +126,36 @@ $padding: 4px;
   .ordonnee {
     position: absolute;
     color: lighten($greyBackground, 60%);
-    margin-left: -30px;
-    margin-top: -10px;
+    margin-left: -40px;
+    margin-top: -17px;
     text-align: right;
+    font-size: 30px;
+
+    &.decimal {
+      margin-left: -60px;
+    }
 
     &.middle {
-      margin-top: calc((#{$height} - 2 *#{$padding}) / 2 - 11px);
+      margin-top: calc((#{$height} - 2 *#{$padding}) / 2 - 19px);
     }
     &.min {
-      margin-top: calc(#{$height} - 2 *#{$padding} - 12px);
-      margin-left: -20px;
+      margin-top: calc(#{$height} - 2 *#{$padding} - 22px);
+      margin-left: -24px;
     }
     &.max {
-      color: red;
+      color: #e00d0d;
       font-weight: bold;
       font-size: 35px;
       margin-top: -25px !important;
       margin-left: -50px;
       transition: all 0.2s;
+      &.decimal {
+        margin-left: -70px;
+      }
     }
     &.right {
       right: 0;
       margin-left: 0;
-      margin-right: -40px;
 
       &.maxSpeedSession {
         padding: 2px 5px;
@@ -151,7 +165,7 @@ $padding: 4px;
         text-align: center;
         &.max {
           width: 50px;
-          margin-right: -60px;
+          margin-right: -20px;
         }
       }
     }
@@ -179,6 +193,21 @@ $padding: 4px;
       width: calc((#{$width} - #{$padding}) / 2);
       border-right: 4px solid $darkenGreyBackground;
     }
+  }
+}
+
+.control-title {
+  margin-bottom: 50px;
+  width: 200px;
+  text-align: center;
+  margin-left: -58px;
+  color: lighten($greyBackground, 60%);
+  font-size: 40px;
+  &.max {
+    color: #e00d0d;
+    font-weight: bold;
+    transition: all 0.2s;
+    font-size: 50px;
   }
 }
 </style>

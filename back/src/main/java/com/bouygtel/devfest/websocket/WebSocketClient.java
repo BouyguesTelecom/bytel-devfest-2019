@@ -55,7 +55,6 @@ public class WebSocketClient implements WebSocketHandler {
 
 	@Override
 	public void handleMessage(WebSocketSession session, WebSocketMessage<?> messageIn) throws Exception {
-//		LOG.info("Reception du message: {}", messageIn.getPayload());
 		Message message = MAPPER.readValue((String) messageIn.getPayload(), Message.class);
 		messageHandler.handleMessage(message);
 	}
@@ -68,6 +67,7 @@ public class WebSocketClient implements WebSocketHandler {
 	@Override
 	public void afterConnectionClosed(WebSocketSession session, CloseStatus closeStatus) throws Exception {
 		LOG.info("afterConnectionClosed::{}", closeStatus);
+		webSocketSession = null;
 	}
 
 	@Override

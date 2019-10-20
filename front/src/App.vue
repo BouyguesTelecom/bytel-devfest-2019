@@ -27,9 +27,14 @@ export default {
 
 <style lang="scss">
 @import "./style.scss";
+@import "fonts.scss";
+
+* {
+  font-family: "Metal Mania", cursive;
+}
 
 html {
-  overflow: hidden;
+  overflow: hidden !important;
 }
 
 .logo {
@@ -37,13 +42,12 @@ html {
 }
 
 .app-background {
-  background: linear-gradient(135deg, white 17%, #498bc9, #2c2c2c 38% 100%);
+  // background: linear-gradient(135deg, white 17%, #498bc9, #2c2c2c 38% 100%);
+  background: #2c2c2c;
 }
 .headline {
   span {
-    font-family: "Kiona Regular";
     font-size: 40px;
-    font-weight: 100;
     text-shadow: 0 -1px 1px #009dcc, -1px 1px 1px #0055a4, 1px 1.5px 1px #ea5b0f;
   }
 }

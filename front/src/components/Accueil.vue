@@ -2,15 +2,13 @@
   <div class="d-flex fill-height app-content">
     <div class="isConnected" :class="{ok: isConnected}">•</div>
 
-    <div
-      class="mean-gauge align-self-center justify-lg-space-between"
-    >
+    <!-- <div class="mean-gauge align-self-center justify-lg-space-between">
       <mean-speed-control
         :speed="meanSpeed"
         :maxSpeed="maxMeanSpeed"
         :maxSpeedSession="maxMeanSpeedSession"
       />
-    </div>
+    </div>-->
 
     <div
       v-show="!isSessionActive"
@@ -29,26 +27,37 @@
       :speed="speed"
       :maxSpeed="maxSpeedTotal"
       :maxSpeedSession="maxSpeedSession"
-      class="volume-control"
+      title="Vitesse"
+      class="speed-control"
+    ></volume-control>
+    <volume-control
+      :speed="meanSpeed"
+      :maxSpeed="maxMeanSpeed"
+      :maxSpeedSession="maxMeanSpeedSession"
+      :isDecimal="true"
+      title="Endurance"
+      class="mean-speed-control"
     ></volume-control>
 
     <flyer :size="request.size" v-for="request in requests" :key="request.id"></flyer>
 
-    <lambda-counter :number="nombreLambdas" class="lambda-counter"></lambda-counter>
+    <lambda-counter :number="nombreLambdasMax" style="opacity: 0.2" class="lambda-counter"></lambda-counter>
+    <lambda-counter :number="nombreLambdasSession" :max="nombreLambdasMax" class="lambda-counter"></lambda-counter>
+    <v-btn class="reset-button" text icon @click="resetStats">
+      <v-icon>mdi-refresh</v-icon>
+    </v-btn>
   </div>
 </template>
  
 <script>
 import { mapState, mapActions } from "vuex";
 import VolumeControlVue from "./VolumeControl.vue";
-import MeanSpeedControl from "./MeanSpeedControl.vue";
 import FlyerVue from "./Flyer.vue";
 import LambdaCounterVue from "./LambdaCounter.vue";
 
 export default {
   components: {
     "volume-control": VolumeControlVue,
-    "mean-speed-control": MeanSpeedControl,
     flyer: FlyerVue,
     lambdaCounter: LambdaCounterVue
   },
@@ -72,14 +81,13 @@ export default {
     }
   },
   methods: {
-    ...mapActions(["resetCounter", "getStats"])
+    ...mapActions(["resetStats", "getStats"])
   }
 };
 </script>
 
 <style lang="scss" scoped>
 @import "../style.scss";
-@import "../fonts.scss";
 
 .app-content {
   padding: 20px;
@@ -95,15 +103,15 @@ export default {
   }
 }
 
-.volume-control {
+.speed-control {
   position: absolute;
-  bottom: 10px;
+  bottom: 40px;
   right: 85px;
 }
-.mean-gauge {
+.mean-speed-control {
   position: absolute;
-  top: 80px;
-  right: 20px;
+  bottom: 40px;
+  right: 400px;
 }
 
 .encouragements {
@@ -117,12 +125,12 @@ export default {
 
   width: $width;
   height: $height;
-  top: 50%;
+  top: 35%;
   margin-top: calc(-#{$height} / 2);
-  left: 50%;
+  left: 35%;
   margin-left: calc(-#{$width} / 2);
 
-  color: yellowgreen;
+  color: rgb(189, 28, 28);
   // font-weight: 500;
   font-size: 60px;
   background-color: rgba(0, 0, 0, 0.2);
@@ -132,12 +140,11 @@ export default {
 
   font-weight: normal;
   font-style: normal;
-  font-family: "Metal Mania", cursive;
 
   .orange-img {
     filter: contrast(100%) //
       invert(30%) //
-      sepia(50%) //
+      sepia(90%) //
       saturate(10000%) //
       hue-rotate(20deg) //
       drop-shadow(2px 4px 6px black);
@@ -158,7 +165,16 @@ export default {
   }
 }
 .lambda-counter {
+  position: absolute;
   width: 800px;
-  margin-left: 350px;
+  bottom: 40px;
+  left: 350px;
+}
+.reset-button {
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin-top: -50px;
+  z-index: 100;
 }
 </style>

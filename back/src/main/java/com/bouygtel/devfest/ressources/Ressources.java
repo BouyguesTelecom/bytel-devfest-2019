@@ -2,6 +2,8 @@ package com.bouygtel.devfest.ressources;
 
 import java.time.Instant;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 
 import com.bouygtel.devfest.websocket.ActionExecuter;
@@ -12,6 +14,8 @@ import com.bouygtel.devfest.websocket.WebSocketClient;
  */
 @Controller
 public class Ressources {
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(Ressources.class);
 
 	private final Stats stats;
 
@@ -24,7 +28,7 @@ public class Ressources {
 		stats = new Stats();
 	}
 
-	@ActionExecuter(action = "RESET_COUNTER")
+	@ActionExecuter(action = "RESET_STATS")
 	public void resetCounter() {
 		stats.reset();
 	}

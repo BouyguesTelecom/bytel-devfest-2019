@@ -3,12 +3,14 @@ package com.bouygtel.devfest.ressources.config;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.TaskScheduler;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.scheduling.concurrent.ConcurrentTaskScheduler;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.model.AttributeValue;
@@ -21,6 +23,8 @@ import com.bouygtel.devfest.ressources.Session;
 @EnableScheduling
 public class SchedulerConfig {
 
+	private static final Logger LOGGER = LoggerFactory.getLogger(SchedulerConfig.class);
+
 	private final Ressources ressources;
 	private final AmazonDynamoDB clientDynamo;
 
@@ -31,7 +35,9 @@ public class SchedulerConfig {
 
 	@Bean
 	public TaskScheduler taskScheduler() {
-		return new ConcurrentTaskScheduler();
+		ThreadPoolTaskScheduler threadPoolTaskScheduler = new ThreadPoolTaskScheduler();
+		threadPoolTaskScheduler.setPoolSize(10);
+		return threadPoolTaskScheduler;
 	}
 
 	@Scheduled(fixedDelay = 200)
@@ -51,6 +57,5 @@ public class SchedulerConfig {
 
 		ScanResult result = clientDynamo.scan(scanRequest);
 		this.ressources.getStats().setLambdasUtilisees(result.getItems().size());
-		session.setLambdasUtilisees(this.ressources.getStats().getLambdasUtilisees());
 	}
 }
