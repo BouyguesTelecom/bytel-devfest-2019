@@ -52,7 +52,7 @@ public class Stats {
 		}
 	}
 
-	public void addHit(Instant hit) {
+	public synchronized void addHit(Instant hit) {
 		hits.add(hit);
 	}
 

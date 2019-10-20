@@ -40,7 +40,7 @@ public class SchedulerConfig {
 		return threadPoolTaskScheduler;
 	}
 
-	@Scheduled(fixedDelay = 200)
+	@Scheduled(fixedDelay = 50)
 	public void sendSpeed() {
 		ressources.sendStats();
 	}
